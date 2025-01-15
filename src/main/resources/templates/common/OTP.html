@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP</title>
+    <link rel="stylesheet" href="" th:href="@{../css/style.css}">
+    <head th:include="user/common/head::head"></head>
+</head>
+<body>
+<header th:replace="user/common/navbar::navbar"> </header>
+<div class="container mb-3">
+    <div class="card mx-auto" style="width: 55rem; ">
+        <div class="card-header text-center bg-info ">
+            <h3>Give Your OTP CODE</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="*{message != null}" th:fragment="alert (type, message)" class="alert alert-warning alert-dismissible fade show text-center" role="alert" th:classappend="'alert-' + ${type}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span th:text="${message}">Test</span>
+            </div>
+            <form th:action="@{/user/otp}" method="POST" class="text-center">
+                <label class="col-6 text-left mb-2 p-0 text-info">Enter OTP Code:</label>
+                <input type="text" name="otp" placeholder="Enter Your Code" class="form-control mb-4 col-6 mx-auto">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<footer th:include="user/common/footer"></footer>
+<div th:include="user/common/js-files"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+.games-schedule .well {
+    background-color: #fafbfc;
+    border: 1px #e7e7e7 solid;
+    border-top: 2px #1761a6 solid;
+    border-radius: 0px;
+    padding: 0 10px 0 10px;
+}
+
+.games-schedule-title {
+    background-color: #1761a6;
+    color: #ffffff;
+    padding: 2px;
+    margin-bottom: 5px;
+}
+.games-schedule-title h5 {
+    font-size: 18px;
+    text-align: center;
+    margin: 3px 0 3px 0;
+}
+.games-schedule-items {
+    padding: 5px;
+    margin-bottom: 15px;
+}
+.last-item {
+    margin-bottom: 0px;
+}
+.games-team {
+    margin-bottom: 12px;
+}
+
+.games-team span {
+    color: #de6c10;
+    font-size: 13px;
+}
+.games-dash {
+    border: none;
+    border-top: 1px #95b3d0 dotted;
+}
+.games-info p {
+    margin: 0;
+    padding: 0;
+    color: #0a2948;
+    line-height: 20px;
+}
+.games-schedule-footer {
+    background-color: #1b1e21;
+    color: #ffffff;
+    font-size: 10px;
+    padding: 5px;
+    text-align: center;
+}
+.games-schedule-footer p {
+    margin: 0;
+}

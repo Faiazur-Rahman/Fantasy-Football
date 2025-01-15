@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Match Fixture</title>
+
+    <link rel="stylesheet" href="" th:href="@{../css/RoundMatch.css}">
+    <head th:include="user/common/head::head"></head>
+
+</head>
+<body>
+
+<header th:replace="user/common/navbar::navbar"></header>
+
+<div class="container px-5">
+    <nav class="my-4 py-1 bg-black">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <button onclick="upcomingRound()" class="btn btn-outline-success">Upcoming Rounds</button>
+            </div>
+            <div class="col-md-4 text-center">
+                <button onclick="ongoingRound()" class="btn btn-outline-success">Ongoing Round</button>
+            </div>
+            <div class="col-md-4 text-center">
+                <button onclick="previousRound()" class="btn btn-outline-success">Previous Rounds</button>
+            </div>
+        </div>
+    </nav>
+    <div id="upcoming">
+        <div th:each="round : ${rounds}" class="mb-1">
+            <div class="row" th:if="${(round.getRoundDate().substring(3,5) > date.substring(3,5)) || (round.getRoundDate().substring(0,2) > date.substring(0,2) && round.getRoundDate().substring(3,5) == date.substring(3,5))}">
+                <div class="col-md-12 text-center games-schedule-title" style="border-radius: 30%">
+                    <h4 th:text="${round.getRoundName()}">round Test</h4>
+                </div>
+                <div th:each="match: ${matches}">
+                    <div th:if="${match.getRoundId()==round.getId()}" class="mx-1">
+                        <div class="games-schedule mt-1 p-0 col-md-12 ">
+                            <div class="well">
+                                <div class="games-schedule-items">
+                                    <div class="">
+                                        <div class="col-md-12 text-center mb-2">
+                                            <span class="h5" th:text="${match.getTeam1Name()}">Test</span>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <span class="h6 bg-secondary p-2 rounded-circle">VS</span>
+                                        </div>
+                                        <div class="col-md-12 text-center mt-2">
+                                            <span class="h5" th:text="${match.getTeam2Name()}">Test</span>
+                                        </div>
+                                    </div>
+                                    <div class="row games-info">
+                                        <div class="col-md-12">
+                                            <p>
+                                                Date:
+                                                <time th:text="${round.getRoundDate()}"></time>
+                                                <small>Time: </small><small
+                                                    th:text="${match.getMatchTime()}">time test</small>
+                                            </p>
+                                            <p class="games-dash"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="games-schedule-footer">
+                                <div th:each="tournament: ${tournaments}">
+                                    <p th:if="${tournament.getId()==round.getTournament_key()}"
+                                       th:text="${tournament.getName()}" class="test-center"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ongoing">
+        <div th:each="round : ${rounds}" class="mb-1">
+            <div class="row" th:if="${round.getRoundDate().substring(0,2)==date.substring(0,2) && round.getRoundDate().substring(3,5)==date.substring(3,5)}">
+                <div class="col-md-12 text-center games-schedule-title" style="border-radius: 30%">
+                    <h4 th:text="${round.getRoundName()}">round Test</h4>
+                </div>
+                <div th:each="match: ${matches}">
+                    <div th:if="${match.getRoundId()==round.getId()}" class="mx-1">
+                        <div class="games-schedule mt-1 p-0 col-md-12 ">
+                            <div class="well">
+                                <div class="games-schedule-items">
+                                    <div class="">
+                                        <div class="col-md-12 text-center mb-2">
+                                            <span class="h5" th:text="${match.getTeam1Name()}">Test</span>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <span class="h6 bg-secondary p-2 rounded-circle">VS</span>
+                                        </div>
+                                        <div class="col-md-12 text-center mt-2">
+                                            <span class="h5" th:text="${match.getTeam2Name()}">Test</span>
+                                        </div>
+                                    </div>
+                                    <div class="row games-info">
+                                        <div class="col-md-12">
+                                            <p th:if="${round.getRoundDate() == date}">
+                                                <time>Match Today at</time>
+                                                <small th:text="${match.getMatchTime()}">time test</small>
+                                            </p>
+                                            <p class="games-dash"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="games-schedule-footer">
+                                <div th:each="tournament: ${tournaments}">
+                                    <p th:if="${tournament.getId()==round.getTournament_key()}"
+                                       th:text="${tournament.getName()}" class="test-center"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="previous">
+        <div th:each="round : ${rounds}" class="mb-1">
+            <div class="row" th:if="${(round.getRoundDate().substring(3,5) < date.substring(3,5)) || (round.getRoundDate().substring(0,2) < date.substring(0,2) && round.getRoundDate().substring(3,5) == date.substring(3,5))}">
+                <div class="col-md-12 text-center games-schedule-title" style="border-radius: 30%">
+                    <h4 th:text="${round.getRoundName()}">round Test</h4>
+                </div>
+                <div th:each="match: ${matches}">
+                    <div th:if="${match.getRoundId()==round.getId()}" class="mx-1">
+                        <div class="games-schedule mt-1 p-0 col-md-12 ">
+                            <div class="well">
+                                <div class="games-schedule-items">
+                                    <div class="">
+                                        <div class="col-md-12 text-center mb-2">
+                                            <span class="h5" th:text="${match.getTeam1Name()}">Test</span>
+                                            <span class="font-weight-bold">-</span>
+                                            <span class="font-weight-bold" th:text="${match.getTeam1Goal()}"> (0)</span>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <span class="h6 bg-secondary p-2 rounded-circle">VS</span>
+                                        </div>
+                                        <div class="col-md-12 text-center mt-2">
+                                            <span class="h5" th:text="${match.getTeam2Name()}">Test</span>
+                                            <span class="font-weight-bold">-</span>
+                                            <span class="font-weight-bold" th:text="${match.getTeam2Goal()}"> (0)</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="h6"
+                                              th:if="${match.getTeam1Goal()!=match.getTeam2Goal()}">Winner: </span>
+                                        <span class="font-weight-bold"
+                                              th:if="${match.getTeam1Goal()>match.getTeam2Goal()}"
+                                              th:text="${match.getTeam1Name()}"></span>
+                                        <span class="font-weight-bold"
+                                              th:if="${match.getTeam1Goal()<match.getTeam2Goal()}"
+                                              th:text="${match.getTeam2Name()}"></span>
+                                        <span class="font-weight-bold"
+                                              th:if="${match.getTeam1Goal()==match.getTeam2Goal()}">The Match Draw</span>
+                                    </div>
+                                    <div class="row games-info">
+                                        <div class="col-md-12">
+                                            <p th:if="${round.getRoundDate() != date}">
+                                                Date:
+                                                <time th:text="${round.getRoundDate()}"></time>
+                                                <small>Time: </small><small
+                                                    th:text="${match.getMatchTime()}">time test</small>
+                                            </p>
+                                            <p class="games-dash"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="games-schedule-footer">
+                                <div th:each="tournament: ${tournaments}">
+                                    <p th:if="${tournament.getId()==round.getTournament_key()}"
+                                       th:text="${tournament.getName()}" class="test-center"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<script>
+    function upcomingRound() {
+        document.getElementById("upcoming").style.display = "block";
+        document.getElementById("ongoing").style.display = "none";
+        document.getElementById("previous").style.display = "none";
+    }
+
+    function ongoingRound() {
+        document.getElementById("upcoming").style.display = "none";
+        document.getElementById("ongoing").style.display = "block";
+        document.getElementById("previous").style.display = "none";
+    }
+
+    function previousRound() {
+        document.getElementById("upcoming").style.display = "none";
+        document.getElementById("ongoing").style.display = "none";
+        document.getElementById("previous").style.display = "block";
+    }
+</script>
+<footer th:include="user/common/footer"></footer>
+<div th:include="user/common/js-files"></div>
+
+</body>
+</html>

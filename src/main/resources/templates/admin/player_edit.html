@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Edit Player</title>
+  <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+</head>
+<head th:include="common/admin_head">
+
+<body>
+<div class="wrapper">
+  <header th:include="common/admin_nav"></header>
+  <header th:include="common/admin_sidebar"></header>
+  <div class="content-wrapper">
+    <div align="center" class="page">
+
+      <h2 style="background-color:powderblue;">Edit Player</h2>
+      <br/>
+      <div class="col-sm-4">
+        <form action="#" th:action="@{/getallplayer}" th:object="${players}" method="post">
+
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:blue"><b>Player Name</b></label>
+              <td>
+                <input type="hidden" th:field="*{id}" th:value="players.id"/>
+                <input type="text" th:field="*{nickname}" class="form-control" placeholder="Player Name" required oninvalid="this.setCustomValidity('Please Enter Player Name')"
+                       onvalid="this.setCustomValidity('')"/>
+              </td>
+            </tr>
+          </div> <br></br>
+          <div alight="left">
+
+            <tr>
+              <label class="form-label" style="color:peru"><b>First Name</b></label>
+              <td><input type="text" th:field="*{firstname}" class="form-control" placeholder="Firstname" required /></td>
+            </tr>
+          </div> <br></br>
+          <div alight="left">
+
+            <tr>
+              <label class="form-label" style="color:peru"><b>Last Name</b></label>
+              <td><input type="text" th:field="*{lastname}" class="form-control" placeholder="Lastname" required /></td>
+            </tr>
+          </div> <br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:peru"><b>Position</b></label>
+              <td><select name="position" id="position"th:field="*{positionType}">
+                <option value="FW">FW</option>
+                <option value="MF">MF</option>
+                <option value="GK">GK</option>
+                <option value="DF">DF</option>
+              </select></td>
+            </tr>
+          </div> <br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:red"><b>Country</b></label>
+              <td>
+                <select name="" th:field="*{country}" id="">
+                  <option th:each="country : ${countires}" th:value="${country.getFullName()}" th:text="${country.getFullName()}">
+                  </option>
+                </select>
+              </td>
+            </tr>
+          </div><br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:powderblue"><b>Value</b></label>
+              <td><input type="text" th:field="*{value}" class="form-control" placeholder="Value" required /></td>
+            </tr>
+          </div><br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:darkgreen"><b>Status</b></label>
+              <td><select name="status" id="status" th:field="*{status}">
+                <option value="Available">Available</option>
+                <option value="Injured">Injured</option>
+                <option value="Yellow Card Suspension">Yellow Card Suspension</option>
+                <option value="Red Card Suspension">Red Card Suspension</option>
+              </select> </td>
+            </tr>
+          </div><br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:darkgreen"><b>Picture</b></label>
+              <td><input type="text" th:field="*{picture}" class="form-control" placeholder="Image Link" required /></td>
+            </tr>
+          </div><br></br>
+          <div alight="left">
+            <tr>
+              <label class="form-label" style="color:skyblue"><b>Match Point</b></label>
+              <td><input type="text" th:field="*{playerPoints}" class="form-control" placeholder="Points" required /></td>
+            </tr>
+          </div>
+          <br>
+          <tr class="mb-5">
+            <td colspan="2" >
+              <button type="submit" class="btn btn-info">Save</button>
+            </td>
+          </tr>
+          </table>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <footer th:include="common/admin_footer"></footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+</body>
+</html>

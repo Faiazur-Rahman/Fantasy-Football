@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="" th:href="@{../css/profile.css}">
+    <head th:include="user/common/head::head"></head>
+</head>
+<body>
+
+<header th:replace="user/common/navbar::navbar"> </header>
+
+<section class="my-5">
+    <div class="container">
+        <div class="text-center mx-auto">
+            <div th:if="*{message != null}" th:fragment="alert (type, message)"
+                 class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+                 th:classappend="'alert-' + ${type}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span th:text="${message}">Test</span>
+            </div>
+            <h2><span th:text="${user.getFirst_name()}"></span> <span th:text="${user.getLast_name()}"></span></h2>
+            <div th:if="${image}"  style="margin-bottom: 10px">
+                <img style="height: 150px; width: 150px; border-radius: 50%; overflow: hidden" th:src="@{'data:image/jpeg;base64,'+${image}}" alt="profile Image">
+            </div>
+            <div th:unless="${image}"  style="margin-bottom: 10px">
+                <img  style="height: 150px; width: 150px; border-radius: 50%; overflow: hidden" th:src="@{../image/default.png}" alt="profile Image">
+            </div>
+            <form method="post" th:action="@{/image/upload}" enctype="multipart/form-data">
+                <div style="width: 20%; margin: auto; margin-bottom: 10px">
+                    <input type="file" name="file" class="form-control-file" accept="image/png, image/jpeg">
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-6 col-lg-6">
+          <div class="card">
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-md-4 col-lg-4 text-left">
+                          <label style="font-weight:bold;">First Name</label>
+                      </div>
+                      <div class="col-md-4 col-lg-4 text-center p-0">
+                          <p th:text="${user.getFirst_name()}"></p>
+                      </div>
+                      <div class="col-md-4 col-lg-4 text-right p-0" onclick="updateFirstName()">
+                          <button id="firstName" class="btn btn-primary rounded-pill">Update</button>
+                      </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                      <div class="col-md-4 col-lg-4 text-left">
+                          <label style="font-weight:bold;">Last Name</label>
+                      </div>
+                      <div class="col-md-4 col-lg-4 text-center p-0">
+                          <p th:text="${user.getLast_name()}"></p>
+                      </div>
+                      <div class="col-md-4 col-lg-4 text-right p-0" onclick="updateLastName()">
+                          <button id="lastName" class="btn btn-primary rounded-pill">Update</button>
+                      </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                      <div class="col-md-6 col-lg-6">
+                          <label style="font-weight:bold;">User Name</label>
+                      </div>
+                      <div class="col-md-6 col-lg-6 text-right">
+                          <p th:text="${user.getUsername()}">test</p>
+                      </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                      <div class="col-md-6 col-lg-6">
+                          <label style="font-weight:bold;">Email</label>
+                      </div>
+                      <div class="col-md-6 col-lg-6 text-right">
+                          <p th:text="${user.getEmail()}">test</p>
+                      </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                      <div class="col-md-6 col-lg-6" onclick="updatePassword()">
+                          <label style="font-weight:bold;">Password</label>
+                      </div>
+                      <div class="col-md-6 col-lg-6 text-right p-0" onclick="updatePassword()">
+                          <button id="password" class="btn btn-primary rounded-pill">Change</button>
+                      </div>
+                      <div th:if="*{msg != null}" th:fragment="alert (type, message)"
+                           class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+                           th:classappend="'alert-' + ${type}">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                          <span th:text="${msg}">Test</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6 col-lg-6">
+          <div class="card">
+              <div class="card-body">
+                      <table class="table table-striped mx-auto table-bordered text-center">
+                          <thead>
+                          <tr>
+                              <th>Event Name</th>
+                              <th>Event Point</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr th:each="events:${eventPoint}">
+                              <td th:text="${events.getUsername()}"></td>
+                              <td th:text="${events.getPoint()}"></td>
+                          </tr>
+                          </tbody>
+                      </table>
+              </div>
+          </div>
+      </div>
+
+      <!-- Update First Name Modal -->
+      <div id="modal1" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+              <span class="close">&times;</span>
+              <form th:action="@{/common/updateFirstName}" method="POST" class="text-center">
+                  <label class="col-6 text-left mb-2 p-0 text-info">Enter First Name:</label>
+                  <input type="text" name="name" placeholder="Enter First Name" class="form-control mb-4 col-6 mx-auto" th:value="${user.getFirst_name()}">
+                  <button type="submit" class="btn btn-primary">Update</button>
+              </form>
+          </div>
+      </div>
+      <!-- Update Last Name Modal -->
+      <div id="modal2" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+              <span class="close">&times;</span>
+              <form th:action="@{/common/updateLastName}" method="POST" class="text-center">
+                  <label class="col-6 text-left mb-2 p-0 text-info">Enter Last Name:</label>
+                  <input type="text" name="name" placeholder="Enter Last Name" class="form-control mb-4 col-6 mx-auto" th:value="${user.getLast_name()}">
+                  <button type="submit" class="btn btn-primary">Update</button>
+              </form>
+          </div>
+      </div>
+      <!-- Update password Modal -->
+      <div id="modal3" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+              <span class="close">&times;</span>
+              <form th:action="@{/common/updatePassword}" method="POST" class="text-center" name="changePassword"  onsubmit="return validateform()">
+                  <label class="col-6 text-left mb-2 p-0 text-info">Enter Old Password:</label>
+                  <input type="password" id="oldpassword" name="oldpassword" placeholder="Enter old Password" class="form-control mb-4 col-6 mx-auto">
+                  <label class="col-6 text-left mb-2 p-0 text-info">Enter New Password:</label>
+                  <input type="password" name="password" id="passowrd" placeholder="Enter New password" class="form-control mb-4 col-6 mx-auto">
+                  <div class="col-6 mx-auto row p-0 text-left">
+                      <small class="text-danger" id="error"></small>
+                  </div>
+                  <div class="col-12 mb-3">
+                      <small class="text-muted">*must have at least 1 letter & number & special character &
+                          length>8</small>
+                  </div>
+                  <label class="col-6 text-left mb-2 p-0 text-info">Confirm Password:</label>
+                  <input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" class="form-control mb-4 col-6 mx-auto">
+                  <div class="col-6 mx-auto row p-0 text-left">
+                      <small class="text-danger" id="passworderror"></small>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+              </form>
+          </div>
+      </div>
+
+  </div>
+</div>
+
+<script th:src="@{../js/profile.js}"></script>
+
+<footer th:include="user/common/footer"></footer>
+<div th:include="user/common/js-files"></div>
+
+</body>
+</html>

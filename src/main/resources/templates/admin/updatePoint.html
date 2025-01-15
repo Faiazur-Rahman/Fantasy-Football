@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Update Point</title>
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+</head>
+<head th:include="common/admin_head">
+
+<body>
+
+  <div class="wrapper">
+      <header th:include="common/admin_nav"></header>
+      <header th:include="common/admin_sidebar"></header>
+      <div class="content-wrapper">
+          <div align="center" class="page">
+
+              <h2 style="background-color:powderblue;">Update Point</h2>
+              <br/>
+              <div class="col-sm-4">
+                  <form th:action="@{/points/calculate}"  method="post">
+
+                      <div alight="left">
+                          <tr>
+                              <label class="form-label" style="color:gray"><b>Goal Scored</b></label>
+                              <td>
+                                  <input type="hidden" name="playerId" th:value="${playerId}"/>
+                                  <select  class="form-control" id="goalScored" name="goalScored" placeholder="Number of Goals Scored" required oninvalid="this.setCustomValidity('Please Enter Number of Goals')"
+                                         onvalid="this.setCustomValidity('')">
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+
+                          <tr>
+                              <label class="form-label"  style="color:gray" ><b>Assist</b></label>
+                              <td><select  class="form-control" id="assist" name="assist" placeholder="Number of Assists" required >
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+
+                          <tr>
+                              <label class="form-label" style="color:gray"><b>Match Played</b></label>
+                              <td><select class="form-control" id="matchPlayed" name="matchPlayed" placeholder="1 if Played or 0 if not Played" required >
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
+                              </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+
+                          <tr>
+                              <label class="form-label"  style="color:gray"><b>Clean Sheet</b></label>
+                              <td><select  class="form-control "id="cleanSheet" name="cleanSheet" placeholder="1 if Have Clean Sheet or 0 if not " required >
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
+                              </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+                          <tr>
+                              <label class="form-label" style="color:gray"><b>Yellow Card</b></label>
+                              <td><select class="form-control "id="yellowCard" name="yellowCard" placeholder="1 if Have Yellow Card or 0 if not" required >
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
+                              </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+                          <tr>
+                              <label class="form-label" style="color:gray" ><b>Red Card</b></label>
+                              <td><select  class="form-control"id="redCard" name="redCard" placeholder="1 if Have Red Card or 0 if not" required >
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
+                              </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <div alight="left">
+                          <tr>
+                              <label class="form-label" style="color:gray"><b>Man of the Match</b></label>
+                              <td><select class="form-control" id="manOfTheMatch" name="manOfTheMatch" placeholder="1 if Man of the Match or 0 if not" required >
+                                  <option value="0">No</option>
+                                  <option value="1">Yes</option>
+                              </select>
+                              </td>
+                          </tr>
+                      </div>
+                      <br>
+                      <tr>
+                          <td colspan="2">
+                              <button type="submit" class="btn btn-info">Update</button>
+                          </td>
+                      </tr>
+                      </table>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <footer th:include="common/admin_footer"></footer>
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+          <!-- Control sidebar content goes here -->
+      </aside>
+
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>Player List</title>
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{../css/show_user_list.css}">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+<head th:include="common/admin_head">
+<body>
+<div class="wrapper">
+    <!-- Navbar -->
+    <header th:include="common/admin_nav"></header>
+    <!-- Navbar -->
+
+
+    <!--    Main Sidebar Container-->
+    <header th:include="common/admin_sidebar"></header>
+
+
+    <!--    Main Sidebar Container-->
+    <div th:if="*{message != null}" th:fragment="alert (type, message)"
+         class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${message}">Test</span>
+    </div>
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-box clearfix">
+                        <div class="table-responsive">
+                            <table class="table user-list">
+                                <tr>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6 mt-1">
+                                            <div class="flex-child addPlayer text-left ml-5" align="center">
+                                                <h3><a th:href="@{'/add_player'}" class="btn btn-info">Add New Player</a></h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="flex-child text-right mx-right mr-5 p-2" align="left">
+                                             <span class=""><a th:href="@{/points/update}" class="btn btn-info"
+                                                              th:data-confirm-delete="|Are you sure you want to Update All Points|"
+                                                              onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false">Update Points</a></span>
+                                                <span><a th:href="@{/points/reset}" class="btn btn-info"
+                                                         th:data-confirm-delete="|Are you sure you want to Reset All Points|"
+                                                         onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false">Reset Points</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div th:if="*{red_message != null}" th:fragment="alert (type, message)"
+                                         class="alert alert-danger alert-dismissible fade show text-center" role="alert"
+                                         th:classappend="'alert-' + ${type}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <span th:text="${red_message}">Test</span>
+                                    </div>
+                                    <div th:if="*{green_message != null}" th:fragment="alert (type, message)"
+                                         class="alert alert-success alert-dismissible fade show text-center"
+                                         role="alert"
+                                         th:classappend="'alert-' + ${type}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <span th:text="${green_message}">Test</span>
+                                    </div>
+                                    <div th:if="*{exist_message != null}" th:fragment="alert (type, message)"
+                                         class="alert alert-danger alert-dismissible fade show text-center" role="alert"
+                                         th:classappend="'alert-' + ${type}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <span th:text="${exist_message}">Test</span>
+                                    </div>
+                                    <div class="my-2">
+                                        <div class="w-25 mx-auto">
+                                            <form th:action="@{/players/search}">
+                                                <span>
+                                                    <input type="text" name="keyword" class="form-control mb-1"
+                                                           placeholder="search here...">
+                                                </span>
+                                                <span>
+                                                    <input type="submit" class="btn-success form-control">
+                                                </span>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                </tr>
+                                <thead>
+                                <tr>
+
+                                    <th><span>Players</span></th>
+                                    <th class="text-center"><span>
+                                        <a th:href="@{'/getallplayer/' + ${currentPage} +'?sortField=nickname&sortDir=' +${reverse}}">Player Name</a>
+                                    </span></th>
+                                    <th class="text-center"><span>
+                                        <a th:href="@{'/getallplayer/' + ${currentPage} +'?sortField=country&sortDir=' +${reverse}}">Country</a>
+                                    </span></th>
+                                    <th class="text-center"><span>
+                                        <a th:href="@{'/getallplayer/' + ${currentPage} +'?sortField=positionType&sortDir=' +${reverse}}">Position</a>
+                                    </span></th>
+                                    <th class="text-center"><span>
+                                        <a th:href="@{'/getallplayer/' + ${currentPage} +'?sortField=value&sortDir=' +${reverse}}">Value</a>
+                                    </span></th>
+                                    <th class="text-center"><span>
+                                        <a th:href="@{'/getallplayer/' + ${currentPage} +'?sortField=playerPoints&sortDir=' +${reverse}}">Last Round Point</a>
+                                    </span></th>
+                                    <th class="text-center"><span>Status</span></th>
+                                    <th class="text-center"><span>Edit Player</span></th>
+                                    <th class="text-center"><span>Delete Player</span></th>
+                                    <th class="text-center"><span>Update Point</span></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                <tr th:each="player : ${player_2}">
+
+                                    <td>
+
+                                        <img th:src="${player.picture}" height="50" width="40"></td>
+                                    <td>
+                                        <h6 th:text="${player.nickname}"></h6></td>
+                                    <td><h6 th:text="${player.country}"></h6></td>
+                                    <td><h6 th:text="${player.positionType}"></h6></td>
+                                    <td><h6 th:text="${player.value}"></h6></td>
+                                    <td><h6 th:text="${player.playerPoints}"></h6></td>
+                                    <td><h6 th:text="${player.status}"></h6></td>
+                                    <td><a th:href="@{'/getallplayer/edit/' + ${player.id}}" class="btn btn-success">Edit</a>
+                                    </td>
+                                    <td><a th:href="@{'/getallplayer/delete/' + ${player.id}}" class="btn btn-danger"
+                                           th:data-confirm-delete="|Are you sure you want to delete this Player ${player.nickname}?|"
+                                           onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false">Delete</a>
+                                    </td>
+                                    <td><a th:href="@{'/points/updatePoint/' + ${player.id}}" class="btn btn-info">Update</a>
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="font-size: large" class="panel-footer">
+                            <nav aria-label="Page navigation example">
+                                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <span>
+                                           <a class="page-link"
+                                              th:href="@{/getallplayer/1}+ '?sortField='+${sortField}+'&sortDir=' +${reverse}">First</a>
+                                        </span>
+                                    </li>
+
+                                    <li class="page-item">
+                                        <span>
+                                            <a th:if="${currentPage!=1}"
+                                               th:href="@{'/getallplayer/' + ${currentPage - 1}}+ '?sortField='+${sortField}+'&sortDir=' +${reverse}">Previous</a>
+                                        </span>
+                                    </li>
+
+                                    <li class="page-item">
+                                       <span th:each="i: ${#numbers.sequence(1, totalPage)}">
+                                          <a th:href="@{'/getallplayer/' + ${i}}+ '?sortField='+${sortField}+'&sortDir=' +${reverse}">[[${i}]]</a>
+                                       </span>
+                                    </li>
+                                    <li class="page-item">
+                                        <span>
+                                            <a th:if="${currentPage}!=${totalPage}"
+                                               th:href="@{'/getallplayer/' + ${currentPage +1}}+ '?sortField='+${sortField}+'&sortDir=' +${reverse}">Next</a>
+                                        </span>
+                                    </li>
+                                    <li class="page-item">
+                                        <span>
+                                            <a th:if="${currentPage}!=${totalPage}"
+                                               th:href="@{'/getallplayer/' + ${totalPage}} + '?sortField='+${sortField}+'&sortDir=' +${reverse}">Last</a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <footer th:include="common/admin_footer"></footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--BootStrap JS-->
+<div th:include="common/admin_js"></div>
+
+<script type="text/javascript"></script>
+<!-- AdminLTE App -->
+<script src="/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/pages/dashboard.js"></script>
+
+<!--<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+
+</body>
+
+</html>

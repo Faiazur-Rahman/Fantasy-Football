@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:include="user/common/head::head"></head>
+
+
+
+<!--    <link rel="stylesheet" href="/css/team.css">-->
+    <body>
+<div class="site-wrap">
+    <div class="site-mobile-menu">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-logo">
+                <a href="#"><img src="/image/logo.png" alt="Image"></a>
+            </div>
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+    <header th:replace="user/common/navbar::navbar">
+    </header>
+
+    <div class="grid-container">
+        <div class="grid-child one">
+            <div>
+                <div style="margin-bottom:3px;display: flex">
+                    <div style="color:black; margin-bottom:5px;font-size: 30px;">Choose Line formation</div>
+                    <div>
+                        <select name="formation" id="formation" class="form-control mb-4 col-6 mx-auto" style="width:300px;">
+                            <option value="4-3-3">4-3-3</option>
+                            <option value="3-4-3">3-4-3</option>
+                            <option value="4-4-2">4-4-2</option>
+                            <option value="3-5-2">3-5-2</option>
+
+                        </select>
+                    </div>
+
+                </div>
+                <div class="search-container">
+                    <input id="search-input" type="text" class="form-control" onkeyup="search()" placeholder="search player">
+                    <div class="search-result" style="width:500px; overflow: auto;height: 500px;">
+                    </div>
+                </div>
+                <button style="margin-bottom: 30px;background-color:red" class="btn btn-primary submit-button" onclick="callToController()">ADD ALL Player</button>
+                <!--       <button>Click</button>-->
+v            <div style="width:500px; overflow: auto;height: 500px;">
+                <ul id="mylist" class="addtolist">
+                </ul>
+            </div>
+
+            </div>
+
+        </div>
+        <div class="grid-child two"  style="border-radius: 10px; width:400px; height: 600px;overflow: auto" >
+
+            <div style="background-color: whitesmoke;color: black; height: 50px;text-align: center;padding: 10px;border-radius: 15px ; font-size:20px;font-weight: bold">All Player List</div>
+            <div style="display: flex; border-radius: 15px ;background-color: #EEE7E5;margin-bottom: 5px;margin-top:5px;" th:each="player: ${players}">
+                <img style="margin-right: 10px;border-radius: 5px 5px;" th:src="${player.picture}" height="60" width="50"/>
+                <div style="">
+                    <div style=" align-items: center; justify-content: center;">
+                        <div style="display: flex">
+                            <div style="margin-right: 10px;" th:text="${player.firstname}">playerfirstname</div>
+                            <div style="" th:text="${player.lastname}">playerfirstname</div>
+                        </div>
+
+                        <div style="display: flex">
+                            <span style="margin-right: 10px;">Position: </span>
+                            <div th:text="${player.positionType}">FW</div>
+                        </div>
+                        <div th:text="${player.country}">Argentina</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer th:include="user/common/footer"></footer>
+
+</div>
+
+<div th:include="user/common/js-files"></div>
+
+
+<!--<script th:href="@{../js/team.js}">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    const playerListObj = [];
+    const playerid=[];
+    $(".submit-button").hide();
+    let formation= document.getElementById("formation").value;
+    // let eventId= document.getElementById("eventid").value;
+    let eventId = [[${eventId}]];
+
+    function callToController() {
+
+        $.ajax({
+            type : "POST",
+            url : "/team/createTeam/"+eventId,
+            data : {
+                myArray: playerid,
+                formation:formation
+            },
+            success : function(response) {
+                 alert("team created....");
+                 console.log("ok");
+            },
+            error : function(e) {
+                alert('Error: ' + e);
+            }
+        });
+
+    }
+    function savePlayer(obj){
+        //console.log(obj);
+        obj = JSON.parse(decodeURIComponent(obj))
+        playerListObj.push(obj);
+        playerid.push(obj.id);
+
+        addToList();
+        $(".search-result").hide();
+        if(playerListObj.length===11)
+        {
+            $(".submit-button").show();
+            document.getElementById("search-input").disabled=true;
+            document.getElementById("submit-button").style.backgroundColor="green";
+        }
+    }
+
+
+
+
+    function search() {
+
+        let query = $("#search-input").val();
+        if (query === '') {
+            $(".search-result").hide();
+            $(".submit-button").hide();
+        } else {
+
+
+            let url = `http://localhost:8080/search/${query}`;
+            jQuery.ajax({
+                dataType: "json",
+                url: url,
+                success: function (data) {
+
+                  //  console.log("haha");
+                    let text = `<ul>`
+                    data.forEach((player) => {
+                        text += `<li style="border: 2px solid lightblue"  >`;
+                        text+=`<div style="display: flex">`;
+                        text+=`<div style="display: flex">`;
+                        text+=` <img style="margin-right: 10px;border-radius: 5px;" src="${player.picture}" height="60" width="50"/>`;
+                        text+=`<div style="">`;
+                        text+= '<div style="display: flex;">';
+                        text += `<div style="margin-right: 2px;">${player.firstname}</div>`;
+                        text += `<div>${player.lastname}</div><br/>`;
+                        text+=`</div>`;
+                        text+=`<div style="display: flex;">`;
+                        text += `<span style ="color:deepskyblue" >${player.country}</span>`;
+                        text+=`<div>`;
+                        text+=`<div>`;
+                        //text += `<button id="addButton" style="margin-left: 5px" onclick="savePlayer(${player.id})">Add</button>`;
+                        text += `<button id="addButton" class="btn btn-primary" style="margin-left: 5px" onclick="savePlayer('${encodeURIComponent(JSON.stringify(player))}')">Add</button>`;
+                        text+=`</div>`;
+                        text+=`</div>`;
+                        text+=`</div>`;
+                        text+=`</div>`;
+
+                    })
+                    text += `</ul>`;
+                    $(".search-result").html(text);
+                    $(".search-result").show();
+               /*     console.log(data)*/
+                },
+                error: function (data) {
+                    // successmessage = 'Error';
+                    // $("label#successmessage").text(successmessage);
+                },
+            });
+
+        }
+    }
+
+    function addToList() {
+        let mylist = document.getElementById("mylist");
+        mylist.innerHTML = "";
+        playerListObj.map((item) => {  // item = taskinput.value
+            mylist.innerHTML += `<li ><div class ="texts_flex"><p style="margin-right: 2px;">${item.firstname}</p><p>${item.lastname}</p></div><div class="buttons_flex"><button class ="delete">delete</button></div></li>`;
+
+            //creating the delete button workable
+            let remove = document.querySelectorAll(".delete");
+            let removarr = Array.from(remove);
+          //  console.log(removarr);
+
+            removarr.map((button, index) => {
+                button.addEventListener("click", function () {
+                    mylist.splice(index, 1);
+               //     addToList();
+                });
+            });
+
+
+        });
+    };
+
+</script>
+</body>
+</html>

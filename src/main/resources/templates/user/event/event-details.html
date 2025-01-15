@@ -1,0 +1,1168 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:include="user/common/head::head"></head>
+<style>
+    table {
+        height: 200px
+    }
+
+    th {
+        text-align: center;
+    }
+
+    th a img {
+        border-radius: 20%;
+        width: 100px;
+        height: 130px;
+    }
+
+</style>
+<body>
+<div class="site-wrap">
+
+    <div class="site-mobile-menu">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-logo">
+                <a href="#"><img src="/image/logo.png" alt="Image"></a>
+            </div>
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+    <header th:replace="user/common/navbar::navbar"></header>
+    <div class="row">
+        <div class="col-md-8 d-block" style="padding-left: 50px">
+            <div class="p-2">
+                <nav class="my-4 py-1 " style="margin-bottom: 50px">
+                    <div class="row " >
+
+                        <div class="col-md-4 text-center">
+                            <button class="btn btn-outline-success disabled" th:text="${eventName}"></button>
+                        </div>
+
+                        <!--                               <div class="col-md-4 text-center">-->
+                        <!--                                   <button class="btn btn-outline-success">Ongoing Round</button>-->
+                        <!--                               </div>-->
+
+                        <!--                               <div class="input-group mb-3">-->
+                        <!--                                  -->
+                        <!--                                   <div class="input-group-append">-->
+                        <!--                                       <button class="btn btn-outline-secondary" type="button">Button</button>-->
+                        <!--                                   </div>-->
+                        <!--                               </div>-->
+
+                        <div class="col-md-6 copy-text">
+                            <!--                                   <button class="btn btn-outline-success" th:text="${eventCode}"></button>-->
+                            <label class="event-code">Event code</label>
+                            <input type="text" class="form-control text" aria-describedby="basic-addon2"
+                                   th:value="${eventCode}">
+
+
+                            <button class=" ml-3 clip"><i class="bi bi-clipboard"></i></button>
+                        </div>
+
+
+                    </div>
+                </nav>
+                <div class="card">
+
+                    <!--                       Added for Testing-->
+
+
+                    <!--                       Complete-->
+
+                    <div class="card-header">
+                        <h4>My team</h4>
+                    </div>
+                    <div class="card-body text-center ">
+                        <div class="p-2" th:if="!${teamExists}">
+                            <span class="font-weight-bold" >Choose Formation: </span>
+                            <select name="formation" id="formation" class="p-1 font-weight-bold">
+                                <option value="4-3-3">4-3-3</option>
+                                <option value="4-4-2">4-4-2</option>
+                                <option value="3-4-3">3-4-3</option>
+                            </select>
+                            <span><button onclick="Formation()" id="formationBtn"
+                                          class="btn btn-outline-success">Change</button></span>
+
+                        </div>
+                        <div class="text-center">
+                           <span th:switch="${userTeam.size()>0}">
+                           <button th:case="false" id="createTeamId" class="btn btn-primary submit-button"
+                                   onclick="saveTeam()">Create Team</button>
+                           <a th:case="*" id="updateTeamId" class="btn btn-warning submit-button"
+                              th:href="@{/team/updateTeam/__${eventId}__}" onclick="clearTeam()">Clear Team</a>
+                           </span>
+                        </div>
+                        <div class="text-right ml-1">
+                            <h5 class="text-left ml-2">Remaining Balance:&nbsp; <span id="userBalance"
+                                                                                                  th:text="${userBalance}"></span>
+                            </h5>
+                            <h5 class="text-right ml-2" th:if="${teamExists}">My Team Formation:&nbsp; <span
+                                                                                      th:text="${formation}"></span>
+                            </h5>
+                        </div>
+                        <div id="content"></div>
+
+                        <div class="container-fluid" id="default">
+                            <div class="row">
+                                <div class="col-md-12" id="teamField" style="height:800px;background-color: #00FF40;">
+
+                                           <span th:if="${teamExists && formation=='3-4-3'}" >
+                                                <table class="col-md-12">
+                <tr>
+                    <th colspan="4"></th>
+                    <th colspan="4"></th>
+                    <th colspan="4">
+                        <div class=" selectPlayer d-flex justify-content-center "
+                           >
+                           <div class="card shadow-lg"
+                                style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(0).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(0).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(0).getPositionType()}"></span>
+                           </div>
+                           </div>
+                        </div>
+                    </th>
+                    <th colspan="4"></th>
+                    <th colspan="4"></th>
+                </tr>
+            </table>
+            <table class="col-md-12">
+                <tr>
+                    <th colspan="5">
+                        <div class="selectPlayer d-flex justify-content-center"  >
+                            <div class="card shadow-lg"
+                                 style="border-radius: 20%;width: 100px;height: 160px">
+
+                                <image style="border-radius: 20%;width: 100px;height: 100px"
+                                       th:src="${userTeam.get(1).getPicture()}"></image>
+                                <div class="card-body" style="margin: -12px">
+                                    <span th:text="${userTeam.get(1).getNickname()}"></span>
+                                    <br>
+                                    <span th:text="${userTeam.get(1).getPositionType()}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                    <th colspan="5">
+                        <div class="selectPlayer d-flex justify-content-center" >
+                           <div class="card shadow-lg"
+                                style="border-radius: 20%;width: 100px;height: 160px">
+
+                               <image style="border-radius: 20%;width: 100px;height: 100px"
+                                      th:src="${userTeam.get(2).getPicture()}"></image>
+                               <div class="card-body" style="margin: -12px">
+                                   <span th:text="${userTeam.get(2).getNickname()}"></span>
+                                   <br>
+                                   <span th:text="${userTeam.get(2).getPositionType()}"></span>
+                               </div>
+                           </div>
+                        </div>
+                    </th>
+                    <th colspan="5">
+                        <div class="selectPlayer d-flex justify-content-center" >
+                           <div class="card shadow-lg"
+                                style="border-radius: 20%;width: 100px;height: 160px">
+
+                               <image style="border-radius: 20%;width: 100px;height: 100px"
+                                      th:src="${userTeam.get(3).getPicture()}"></image>
+                               <div class="card-body" style="margin: -12px">
+                                   <span th:text="${userTeam.get(3).getNickname()}"></span>
+                                   <br>
+                                   <span th:text="${userTeam.get(3).getPositionType()}"></span>
+                               </div>
+                           </div>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <table class="col-md-12">
+                <tr>
+                    <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div class="card shadow-lg"
+                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(4).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(4).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(4).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+                    <th colspan="4"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div class="card shadow-lg"
+                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(5).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(5).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(5).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+                    <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div  class="card shadow-lg"
+                             style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(6).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(6).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(6).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+                    <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div class="card shadow-lg"
+                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(7).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(7).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(7).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+
+                </tr>
+            </table>
+            <table class="col-md-12">
+                <tr>
+                    <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div class="card shadow-lg"
+                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(8).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(8).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(8).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+                    <th colspan="4"><div class="selectPlayer d-flex justify-content-center"
+                                       >
+                       <div class="card shadow-lg"
+                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                  th:src="${userTeam.get(9).getPicture()}"></image>
+                           <div class="card-body" style="margin: -12px">
+                               <span th:text="${userTeam.get(9).getNickname()}"></span>
+                               <br>
+                               <span th:text="${userTeam.get(9).getPositionType()}"></span>
+                           </div>
+                       </div>
+                    </div></th>
+                    <th colspan="8">
+                        <div class="selectPlayer d-flex justify-content-center" >
+
+                           <div class="card shadow-lg"
+                                style="border-radius: 20%;width: 100px;height: 160px">
+
+                               <image style="border-radius: 20%;width: 100px;height: 100px"
+                                      th:src="${userTeam.get(10).getPicture()}"></image>
+                               <div class="card-body" style="margin: -12px">
+                                   <span th:text="${userTeam.get(10).getNickname()}"></span>
+                                   <br>
+                                   <span th:text="${userTeam.get(10).getPositionType()}"></span>
+                               </div>
+                           </div>
+                        </div></th>
+                </tr>
+            </table>
+                                           </span>
+                                    <span th:if="${teamExists && formation=='4-3-3'}" >
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="4"></th>
+                                               <th colspan="4"></th>
+                                               <th colspan="4">
+                                                   <div class="selectPlayer d-flex justify-content-center "
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(0).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(0).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(0).getPositionType()}"></span>
+                                                       </div>
+                                                       </div>
+                                                    </div>
+                                               </th>
+                                               <th colspan="4"></th>
+                                               <th colspan="4"></th>
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="5">
+                                                    <div class="selectPlayer d-flex justify-content-center"
+                                                       >
+                                                        <div class="card shadow-lg"
+                                                             style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                            <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                   th:src="${userTeam.get(1).getPicture()}"></image>
+                                                            <div class="card-body" style="margin: -12px">
+                                                                <span th:text="${userTeam.get(1).getNickname()}"></span>
+                                                                <br>
+                                                                <span th:text="${userTeam.get(1).getPositionType()}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(2).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(2).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(2).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(3).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(3).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(3).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(4).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(4).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(4).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(5).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(5).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(5).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="4"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(6).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(6).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(6).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                                                  >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(7).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(7).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(7).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="8"><div class="selectPlayer d-flex justify-content-center"
+                                                                  >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(8).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(8).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(8).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="4"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(9).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(9).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(9).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="8">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(10).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(10).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(10).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                           </tr>
+                                           </table>
+                                    </span>
+                                    <span th:if="${teamExists && formation=='4-4-2'}" >
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="4"></th>
+                                               <th colspan="4"></th>
+                                               <th colspan="4">
+                                                   <div class="selectPlayer d-flex justify-content-center "
+                                                       >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(0).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(0).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(0).getPositionType()}"></span>
+                                                       </div>
+                                                       </div>
+                                                    </div>
+                                               </th>
+                                               <th colspan="4"></th>
+                                               <th colspan="4"></th>
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="5">
+                                                    <div class="selectPlayer d-flex justify-content-center"
+                                                       >
+                                                        <div class="card shadow-lg"
+                                                             style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                            <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                   th:src="${userTeam.get(1).getPicture()}"></image>
+                                                            <div class="card-body" style="margin: -12px">
+                                                                <span th:text="${userTeam.get(1).getNickname()}"></span>
+                                                                <br>
+                                                                <span th:text="${userTeam.get(1).getPositionType()}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(2).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(2).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(2).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(3).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(3).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(3).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                               <th colspan="5">
+                                                   <div class="selectPlayer d-flex justify-content-center"
+                                                      >
+                                                       <div class="card shadow-lg"
+                                                            style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                           <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                                  th:src="${userTeam.get(4).getPicture()}"></image>
+                                                           <div class="card-body" style="margin: -12px">
+                                                               <span th:text="${userTeam.get(4).getNickname()}"></span>
+                                                               <br>
+                                                               <span th:text="${userTeam.get(4).getPositionType()}"></span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </th>
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="5"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(5).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(5).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(5).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="5"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(6).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(6).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(6).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="5"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(7).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(7).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(7).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="5"><div class="selectPlayer d-flex justify-content-center"
+                                               >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(8).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(8).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(8).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+
+                                           </tr>
+                                           </table>
+                                           <table class="col-md-12">
+                                           <tr>
+                                               <th colspan="10"><div class="selectPlayer d-flex justify-content-center"
+                                                                   >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(9).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(9).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(9).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                               <th colspan="10"><div class="selectPlayer d-flex justify-content-center"
+                                                                  >
+                                                   <div class="card shadow-lg"
+                                                        style="border-radius: 20%;width: 100px;height: 160px">
+
+                                                       <image style="border-radius: 20%;width: 100px;height: 100px"
+                                                              th:src="${userTeam.get(10).getPicture()}"></image>
+                                                       <div class="card-body" style="margin: -12px">
+                                                           <span th:text="${userTeam.get(10).getNickname()}"></span>
+                                                           <br>
+                                                           <span th:text="${userTeam.get(10).getPositionType()}"></span>
+                                                       </div>
+                                                   </div>
+                                               </div></th>
+                                           </tr>
+                                           </table>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <input type="hidden" name="position" id="position" value=""/>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3 class="text-left ml-2">My Points: <span th:text="${myPoint}"></span></h3>
+            <h4 class="text-left ml-2">Round Points: <span th:text="${teamPoint}"></span></h4>
+
+
+            <div th:if="${round}">
+                <span class="text-center font-weight-bold">Today round: <p class="bg-secondary p-2"
+                                                                           th:text="${round.get().getRoundName()}"></p> </span>
+                <h6>Matches : </h6>
+                <div th:each="match: ${matches}" class="card m-2">
+                    <div th:text="${match.getTeam1Name()}"></div>
+                    <div class="text-center my-2">
+                        <span class="h6 bg-secondary p-2  -circle">VS</span>
+                    </div>
+                    <div th:text="${match.getTeam2Name()}"></div>
+                    <span>Start at: <small th:text="${match.getMatchTime()}"></small></span>
+                </div>
+            </div>
+            <div th:unless="${round}">
+                <h5>No Round Found Today!!</h5>
+            </div>
+
+            <div class="card" th:if="!${teamExists}" style="overflow-y: scroll; height:1200px;">
+                <div class="card-body" id="showPlayers">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="leaderboard">
+            <h3 class="text-center">
+                LeaderBoard
+            </h3>
+            <hr>
+            <ol>
+                <li th:each="rank: ${ranking}">
+                    <p th:if="${myUsername==rank.getUsername()}">
+                        <mark th:text="${rank.getUsername()}" style="color: black">Name</mark>
+                        <small class="" th:text="${rank.getPoint()}" style="color: white">Point</small>
+                    </p>
+                    <p th:if="${myUsername!=rank.getUsername()}">
+                        <mark th:text="${rank.getUsername()}">Name</mark>
+                        <small class="" th:text="${rank.getPoint()}">Point</small>
+                    </p>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+</div>
+<div th:include="user/common/footer"></div>
+<div th:include="user/common/js-files"></div>
+
+
+</div>
+</body>
+<script>
+
+    $(document).ready(function () {
+        let today = new Date();
+        // || today.getHours() < 3 || today.getHours() > 15
+        if ([[${teamExists}]]) {
+            let x = document.getElementById('teamField').querySelectorAll('.selectPlayer');
+            for (let i = 0; i < x.length; i++)
+                x[i].classList.add('disabled');
+        }
+        else{
+            Formation();
+        }
+    });
+    function clearTeam(){
+        alert("Are you sure you want to clear team");
+    }
+    let copyText = document.querySelector(".copy-text");
+    copyText.querySelector("button").addEventListener("click", function () {
+        let input = copyText.querySelector("input.text");
+        console.log(input);
+        input.select();
+        document.execCommand("copy");
+        copyText.classList.add("active");
+        window.getSelection().removeAllRanges();
+        setTimeout(function () {
+            copyText.classList.remove("active");
+        }, 2500);
+    })
+    // function Formation(){
+    //     alert("hi");
+    // }
+    let playerDivCardsId = [];
+    let selectedPlayerId = [];
+    let selectedPlayerValues = [];
+    let eventId = [[${event.getId()}]];
+    let prevPlayer = new Map();
+
+    function saveTeam() {
+        let today = new Date();
+        // if(today.getHours() < 3 || today.getHours() > 15){
+        //     alert("You can create a team only, between 3 AM and 3 PM");
+        //     return;
+        // }
+        if (selectedPlayerId.length < 11) {
+            alert("Please create a team!");
+            return;
+        }
+        let updatedPoint = 0;
+        for (let i = 0; i < selectedPlayerValues.length; i++) {
+            updatedPoint += parseInt(selectedPlayerValues[i]);
+        }
+        updatedPoint = 100 - updatedPoint;
+        let formation = document.getElementById("formation").value;
+        let sendWhatEver = {
+            selectedPlayerId: selectedPlayerId,
+            selectedPosition: playerDivCardsId,
+            updatedPoint: updatedPoint,
+            formation: formation
+        };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8080/team/createTeam/" + eventId,
+            data: JSON.stringify(sendWhatEver),
+            datatype: "json",
+            success(result) {
+                for (let i = 0; i < playerDivCardsId.length; i++)
+                    document.getElementById(playerDivCardsId[i]).classList.add("disabled");
+                location.reload();
+                alert("You've Successfully Created a Team");
+            },
+            error: function (e) {
+                alert("Error!")
+                console.log("ERROR: ", e);
+            }
+        });
+    }
+
+    function setPlayer(id, playerValue) {
+        let today = new Date();
+        // if(today.getHours() < 3 || today.getHours() > 15){
+        //     alert("You can create a team only, between 3 AM and 3 PM");
+        //     return;
+        // }
+
+        let position = document.getElementById('position').value;
+        let updatedPoint = parseInt(document.getElementById('userBalance').innerHTML) - playerValue;
+        if (updatedPoint < 0) {
+            alert("Player value should be less than your balance!!");
+            return;
+        }
+        console.log(prevPlayer);
+        const index = playerDivCardsId.indexOf(position);
+        console.log(index);
+        if (index > -1) {
+
+            if (document.getElementById("playerListCard" + selectedPlayerId[index])) {
+
+                document.getElementById("playerListCard" + selectedPlayerId[index]).classList.remove("d-none");
+            } else {
+                $('#showPlayers').append(prevPlayer.get(position));
+            }
+            playerDivCardsId.splice(index, 1);
+            selectedPlayerId.splice(index, 1);
+            selectedPlayerValues.splice(index, 1);
+        }
+
+        selectedPlayerId.push(id);
+        playerDivCardsId.push(position);
+        selectedPlayerValues.push(playerValue);
+        updatedPoint = 0;
+        for (let i = 0; i < selectedPlayerValues.length; i++) {
+            updatedPoint += parseInt(selectedPlayerValues[i]);
+        }
+        updatedPoint = 100 - updatedPoint;
+        document.getElementById('userBalance').innerHTML = String(updatedPoint);
+
+        document.getElementById("playerListCard" + id).classList.add("d-none");
+        let sendWhatEver = {
+            id: id,
+            position: position
+        };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8080/getPlayer",
+            data: JSON.stringify(sendWhatEver),
+            datatype: "json",
+            success(result) {
+                document.getElementById(position).innerHTML =
+                    '<div class="card shadow-lg" style="border-radius: 20%;width: 100px;height: 160px" >' +
+
+                    '<image  style="border-radius: 20%;width: 100px;height: 100px" src="' + result.picture + '">' +
+                    '</image>' +
+                    '<div class="card-body" style="margin: -12px">' +
+                    result.nickname + '<br>' + result.value +
+                    '</div>' +
+                    '</div>';
+                let prevPlayerValue =
+                    '<div class="card playerListCard" id="playerListCard' + result.id+'"> ' +
+                    '<div class="card-body ">' +
+                    '<a class="playerId float-left" id="'+result.id+'" onclick="setPlayer(this.id,' + result.value + ')" > '
+                    + '<img style="height: 50px;width: 50px;border-radius: 50%" src="' + result.picture + '">' + '&nbsp;&nbsp;&nbsp;'
+                    + result.firstname + '&nbsp;' + result.lastname + '<p style="padding-left: 38px">Position:&nbsp;&nbsp;' + result.positionType + '</p>' +
+                    '</a>  ' +
+                    '<div class="float-right">' + result.value + '<br/>USD</div>' +
+                    '</div> ' +
+                    '</div> <br>';
+                prevPlayer.set(position,prevPlayerValue);
+                document.getElementsByTagName("th").style = "text-align:center;";
+            },
+            error: function (e) {
+                alert("Error!")
+                console.log("ERROR: ", e);
+            }
+        });
+    }
+    function Formation(){
+
+        playerDivCardsId = [];
+        selectedPlayerId = [];
+        selectedPlayerValues = [];
+        let updatedPoint = 100;
+        document.getElementById('userBalance').innerHTML = String(updatedPoint);
+        $('#showPlayers').empty();
+        let formation = document.getElementById("formation").value;
+        document.getElementById("default").style.display="none";
+
+        if(formation=="4-3-3"){
+            document.getElementById("content").style.display = "block";
+            document.getElementById("content").innerHTML = "  <div class=\"container-fluid\">\n" +
+                "                               <div class=\"row\">\n" +
+                "\n" +
+                "                                   <div class=\"col-md-12\" style=' background-color: #00FF40;'>\n" +
+                "                                       <table class=\"col-md-12\" style=\"height:800px\">\n" +
+                "                                           <tr >\n" +
+                "                                               <th colspan=\"20\" >\n" +
+                "                                                   <a class=\"d-flex justify-content-center \" id=\"goalKeeper\" onClick=\"call(this.id)\" >\n" +
+
+                '<image class="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                    </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                    <a class=\"d-flex justify-content-center\" id=\"defender1\" onClick=\"call(this.id)\">\n" +
+
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender4\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"4\"><a class=\"d-flex justify-content-center\" id=\"mid1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a></th>\n" +
+                "                                               <th colspan=\"8\"><a class=\"d-flex justify-content-center\" id=\"mid2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"4\"><a class=\"d-flex justify-content-center\" id=\"mid3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"4\"><a class=\"d-flex justify-content-center\" id=\"forward1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"8\"><a class=\"d-flex justify-content-center\" id=\"forward2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                                <th colspan=\"4\"><a class=\"d-flex justify-content-center\" id=\"forward3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                           </tr>\n" +
+                "                                       </table>\n" +
+                "                                   </div>\n" +
+                "\n" +
+                "                               </div>\n" +
+                "                           </div>\n" +
+                "                           <input type=\"hidden\" name=\"position\" id=\"position\" value=\"\"/>"
+        } else if(formation=="4-4-2"){
+            document.getElementById("content").style.display = "block";
+            document.getElementById("content").innerHTML = "  <div class=\"container-fluid\">\n" +
+                "                               <div class=\"row\">\n" +
+                "\n" +
+                "                                   <div class=\"col-md-12\" style=' background-color: #00FF40;'>\n" +
+                "                                       <table class=\"col-md-12\" style=\"height:800px\">\n" +
+                "                                           <tr >\n" +
+                "                                               <th colspan=\"20\" >\n" +
+                "                                                   <a class=\"d-flex justify-content-center \" id=\"goalKeeper\" onClick=\"call(this.id)\" >\n" +
+
+                '<image class="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                    </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                    <a class=\"d-flex justify-content-center\" id=\"defender1\" onClick=\"call(this.id)\">\n" +
+
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender4\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid4\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a></th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"10\"><a class=\"d-flex justify-content-center\" id=\"forward1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"10\"><a class=\"d-flex justify-content-center\" id=\"forward2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                           </tr>\n" +
+                "                                       </table>\n" +
+                "                                   </div>\n" +
+                "\n" +
+                "                               </div>\n" +
+                "                           </div>\n" +
+                "                           <input type=\"hidden\" name=\"position\" id=\"position\" value=\"\"/>"
+        } else{
+            document.getElementById("content").style.display = "block";
+            document.getElementById("content").innerHTML = "<div class=\"container-fluid\">\n" +
+                "                               <div class=\"row\">\n" +
+                "\n" +
+                "                                   <div class=\"col-md-12\" style='background-color: #00FF40;'>\n" +
+                "                                       <table class=\"col-md-12\" style=\"height:800px\">\n" +
+                "                                           <tr >\n" +
+                "                                               <th colspan=\"20\" >\n" +
+                "                                                   <a class=\"d-flex justify-content-center \" id=\"goalKeeper\" onClick=\"call(this.id)\" >\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                    </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                    <a class=\"d-flex justify-content-center\" id=\"defender1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"10\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"defender3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                               <th colspan=\"5\"><a class=\"d-flex justify-content-center\" id=\"mid4\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                               </a></th>\n" +
+                "                                           </tr>\n" +
+                "                                           <tr>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                    <a class=\"d-flex justify-content-center\" id=\"forward1\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                               </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"10\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"forward2\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                               <th colspan=\"5\">\n" +
+                "                                                   <a class=\"d-flex justify-content-center\" id=\"forward3\" onClick=\"call(this.id)\">\n" +
+                '<image className="shadow-lg  " src="/image/jersy.PNG"></image>' +
+                "                                                   </a>\n" +
+                "                                               </th>\n" +
+                "                                           </tr>\n" +
+                "                                       </table>\n" +
+                "                                   </div>\n" +
+                "\n" +
+                "                               </div>\n" +
+                "                           </div>\n" +
+                "                           <input type=\"hidden\" name=\"position\" id=\"position\" value=\"\"/>"
+        }
+    }
+    function call(position) {
+
+        let sendWhatEver = {
+            position: position,
+            playerList: selectedPlayerId
+        };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8080/event/" + eventId + "/getPositionWisePlayer",
+            data: JSON.stringify(sendWhatEver),
+            datatype: "json",
+            success: function (result) {
+                document.getElementById('position').value = position;
+                $('#showPlayers').empty();
+
+                $.each(result,
+                    function (i, player) {
+                        let eventId = [[${event.getId()}]];
+                        let url = `http://localhost:8080/team/${eventId}/addPlayer/${player.id}`;
+                        var thisPlayer =
+                            '<div class="card playerListCard"> ' +
+                            '<div class="card-body ">' +
+                            '<a class="playerId float-left" onclick="setPlayer(this.id,' + player.value + ')" > '
+                            + '<img style="height: 50px;width: 50px;border-radius: 50%" src="' + player.picture + '">' + '&nbsp;&nbsp;&nbsp;'
+                            + player.firstname + '&nbsp;' + player.lastname + '<p style="padding-left: 38px">Position:&nbsp;&nbsp;' + player.positionType + '</p>' +
+                            '</a>  ' +
+                            '<div class="float-right">' + player.value + '<br/>USD</div>' +
+                            '</div> ' +
+                            '</div> <br>';
+                        $('#showPlayers').append(thisPlayer);
+                    });
+                const aTagCollection = document.getElementsByClassName("playerId");
+                let i = 0;
+                $.each(result,
+                    function (key, player) {
+                        let eventId = [[${event.getId()}]];
+                        let id = player.id;
+                        aTagCollection[i++].setAttribute("id", id);
+                    });
+                const cardCollection = document.getElementsByClassName("playerListCard");
+                i = 0;
+                $.each(result,
+                    function (key, player) {
+                        let id = "playerListCard" + player.id;
+                        cardCollection[i++].setAttribute("id", id);
+                    });
+            },
+            error: function (e) {
+                alert("Error!")
+                console.log("ERROR: ", e);
+            }
+        });
+    }
+
+</script>
+<!--    <script th:src="@{../js/formation.js}"></script>-->
+</html>

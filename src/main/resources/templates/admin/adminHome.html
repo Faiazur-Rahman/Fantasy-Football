@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="https://www.thymleaf.org ">
+<head th:include="common/admin_head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+<div class="wrapper">
+
+    <!-- Preloader -->
+<!--    <div class="preloader flex-column justify-content-center align-items-center">-->
+<!--        <img class="animation__shake" src="/image/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">-->
+<!--    </div>-->
+
+    <!-- Navbar -->
+    <header th:include="common/admin_nav"></header>
+    <!-- Navbar -->
+    <div th:if="*{message != null}" th:fragment="alert (type, message)"
+         class="alert alert-success alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${message}">Test</span>
+    </div>
+
+
+    <!--    Main Sidebar Container-->
+    <header th:include="common/admin_sidebar"></header>
+    <!--    Main Sidebar Container-->
+
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Dashboard</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3 th:text="${totalUser }"></h3>
+
+                                <p>Total User</p>
+                            </div>
+                            <div class="icon">
+                                <!--                <i class="ion ion"></i>-->
+                                <!--                <ion-icon name="bag-remove-outline"></ion-icon>-->
+                            </div>
+                            <a href="/admin/showAllUser" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+
+                                <h3 th:text="${totalPlayer}"></h3>
+                                <!--                <div th:each="inventory: ${inventory}>-->
+                                <!--                th:text="mo">65</h3>-->
+                                <!--                </div>-->
+
+                                <p>Total Player</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-microsoft"></i>
+                            </div>
+                            <a href="/getallplayer" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3 th:text="${totalEvent }"></h3>
+
+                                <p>Running Event</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bug-outline"></i>
+                            </div>
+                            <a href="/event/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3 th:text="${totalCountry}"></h3>
+
+                                <p>Country</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion"></i>
+                            </div>
+                            <a href="/country/getCountry/" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+                <!-- Main row -->
+
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
+        </section>
+
+
+
+
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:include="common/admin_footer"></footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+
+<!--BootStrap JS-->
+<div th:include="common/admin_js"></div>
+<div th:include="user/common/js-files"></div>
+
+<!-- AdminLTE App -->
+<script src="/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/pages/dashboard.js"></script>
+</body>
+</html>

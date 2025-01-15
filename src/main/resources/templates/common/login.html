@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="" th:href="@{../css/style.css}">
+    <head th:include="user/common/head::head"></head>
+</head>
+<body>
+
+<header th:replace="user/common/navbar::navbar"> </header>
+
+<div class="container mb-3">
+    <div class="card mx-auto" style="width: 55rem; ">
+        <div class="card-header text-center bg-info ">
+            <h3>Login with valid Information</h3>
+        </div>
+
+        <div class="card-body">
+            <div th:if="*{message != null}" th:fragment="alert (type, message)" class="alert alert-warning alert-dismissible fade show text-center" role="alert" th:classappend="'alert-' + ${type}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span th:text="${message}">Test</span>
+            </div>
+            <div th:if="*{danger_message != null}" th:fragment="alert (type, message)"
+                 class="alert alert-danger alert-dismissible fade show text-center" role="alert"
+                 th:classappend="'alert-' + ${type}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span th:text="${danger_message}">Test</span>
+            </div>
+            <form th:action="@{/login}" method="POST" class="text-center">
+                <label class="col-6 text-left mb-2 p-0 text-info">Enter Your Username:</label>
+                <input type="text" name="username" placeholder="Enter Username"
+                       class="form-control mb-4 col-6 mx-auto" required="required">
+                <label class="col-6 text-left mb-2 p-0 text-info">Enter Password:</label>
+                <input type="password" name="password" placeholder="Enter Password"
+                       class="form-control mb-4 col-6 mx-auto" id="password" required="required">
+                <div class="col-6 mx-auto row">
+                    <div class="col-6 text-left">
+                        <input type="checkbox" onclick="showPassword()">
+                        <span>Show Password</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                    </div>
+                </div>
+                <br>
+                <div class="p-0">
+                    <span>Forget Password?  </span>
+                    <a th:href="@{/user/forgetPassword}"  ><ins>Forget Password</ins></a>
+                    <br> <br>
+                    <span>Create an account? </span>
+                    <a th:href="@{/user/signupForm}" ><ins>Sign Up</ins></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:include="user/common/footer"></footer>
+
+<script th:src="@{../js/main.js}"></script>
+<div th:include="user/common/js-files"></div>
+
+</body>
+</html>

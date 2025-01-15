@@ -1,0 +1,130 @@
+/*body{*/
+
+/*    font-family: sans-serif;*/
+/*    !*background-color: #111d4a;*!*/
+/*    background-image:url("/image/img_back.jpg");*/
+/*    opacity: 1.4;*/
+/*    background-blend-mode: multiply;*/
+/*    background-size: cover;*/
+/*    background-repeat: no-repeat;*/
+
+/*}*/
+
+/** {*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+h1 {
+    color: #eee;
+    margin-bottom: 30px;
+}
+/*.container {*/
+/*    padding: 40px;*/
+/*    margin: 0 auto;*/
+/*    max-width: 1000px;*/
+/*    text-align: center;*/
+/*}*/
+
+#charactersList {
+    padding-inline-start: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 20px;
+}
+
+.character {
+    list-style-type: none;
+    background-color: #eaeaea;
+    border-radius: 3px;
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas:
+        'name image'
+        'house image';
+    text-align: left;
+}
+
+.character > h2 {
+    grid-area: name;
+    margin-bottom: 0px;
+}
+
+.character > p {
+    grid-area: house;
+    margin: 0;
+    margin-top: -18px;
+}
+
+.character > img {
+    max-height: 100px;
+    grid-area: image;
+}
+
+#search-input {
+    width: 50%;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid #eaeaea;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+#search{
+    position: relative;
+}
+
+#searchWrapper::after {
+    content: '🔍';
+    position: absolute;
+    top: 7px;
+    right: 15px;
+}
+
+.search-result{
+    background: white;
+    margin-bottom: 3px;
+}
+
+.list-group-item{
+
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+
+ul li{
+    list-style: none;
+    max-width: 450px;
+    padding: 20px 10px;
+    margin:20px auto;
+    background: #25222240;
+    font-size: 20px;
+    color: #222;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+ul li .delete{
+    font-size: 16px;
+    color: #222;
+    margin: 0 5px;
+    padding: 10px;
+    text-transform: capitalize;
+    background: none;
+}
+.addtolist{
+    background: whitesmoke;
+}
+.texts_flex, .buttons_flex{
+    display: flex;
+    justify-content:space-between;
+
+}
+span{
+    margin:0 5px;
+}

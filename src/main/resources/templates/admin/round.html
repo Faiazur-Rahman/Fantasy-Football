@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fantasy Football</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+</head>
+<head th:include="common/admin_head"></head>
+<body>
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <header th:include="common/admin_nav"></header>
+    <!-- Navbar -->
+
+    <!--    Main Sidebar Container-->
+    <header th:include="common/admin_sidebar"></header>
+    <!--    Main Sidebar Container-->
+
+    <div class="content-wrapper">
+
+        <div class="container my-3">
+    <div class="card-body">
+        <div th:if="*{message != null}" th:fragment="alert (type, message)" class="alert alert-warning alert-dismissible fade show text-center" role="alert" th:classappend="'alert-' + ${type}">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <span th:text="${message}">Test</span>
+        </div>
+        <form th:action="@{/round/saveRound}" method="POST" class="text-center">
+            <select name="tournament" class="form-control mb-4 col-6 mx-auto">
+                <option th:each="tour : ${tournaments}" th:value="${tour.id}" th:text="${tour.name}">
+                </option>
+            </select>
+            <input type="date" name="roundDate" placeholder="Enter Last Name"
+                   class="form-control mb-4 col-6 mx-auto" required="required">
+            <input type="text" name="roundName" placeholder="Enter Round "
+                   class="form-control mb-4 col-6 mx-auto">
+            <button type="submit" class="btn btn-primary">Save Round</button>
+        </form>
+    </div>
+
+    <h1 style="text-align: center">Round List</h1>
+    <hr>
+    <table class="table table-striped mx-auto table-bordered">
+        <thead>
+        <tr>
+            <th>Round Name</th>
+            <th>Round Date</th>
+            <th>Add Match</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="round: ${rounds}">
+            <td th:text="${round.getRoundName()}"></td>
+            <td th:text="${round.getRoundDate()}"></td>
+            <td>
+                <a th:href="@{/match/matchForm/{id}(id=${round.getId()})}" class="btn btn-success">add match</a>
+            </td>
+            <td>
+                <a th:href="@{/round/deleteRound/{id}(id=${round.getId()})}" class="btn btn-danger"
+                   th:data-confirm-delete="|Are you sure you want to delete this Round ${round.getRoundName()}?|"
+                   onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Round pagination -->
+    <nav aria-label="Pagination" th:if="${rounds.totalPages gt 0}">
+        <ul class="pagination justify-content-center font-weight-medium">
+            <li class="page-item" th:classappend="${rounds.number eq 0} ? 'disabled'">
+                <a class="page-link svg-icon"
+                   th:href="@{/round/allRounds?page={id}(id=${rounds.number lt 2 ? 1 : rounds.number})}"
+                   aria-label="Previous"
+                   title="Previous Page" rel="tooltip">
+                    <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20">prev</span>
+                </a>
+            </li>
+            <li class="page-item disabled" th:if="${rounds.number + 10 < rounds.totalPages}">
+                <a class="page-link svg-icon" href="#">
+                    <span data-feather="more-horizontal" width="20" height="20"></span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${i eq rounds.number + 1} ? 'active'"
+                th:each="i : ${#numbers.sequence(1,rounds.totalPages)}">
+                <a class="page-link" th:href="@{/round/allRounds?page={id}(id=${i})}" th:text="${i}"
+                   th:title="${'Page '+ i}"
+                   rel="tooltip"></a>
+            </li>
+            <li class="page-item" th:classappend="${rounds.number + 1 eq rounds.totalPages} ? 'disabled'">
+                <a class="page-link svg-icon" th:href="@{/round/allRounds?page={id}(id=${rounds.number + 2})}"
+                   aria-label="Next"
+                   title="Next Page" rel="tooltip">
+                    <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20">next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:include="common/admin_footer"></footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!--BootStrap JS-->
+<div th:include="common/admin_js"></div>
+
+
+<!-- AdminLTE App -->
+<script src="/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/pages/dashboard.js"></script>
+
+<script th:src="@{../js/main.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+
+</body>
+</html>

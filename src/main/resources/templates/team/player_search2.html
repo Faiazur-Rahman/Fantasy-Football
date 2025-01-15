@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Player Add </title>
+
+    <link rel="stylesheet" th:href="@{../css/team.css}">
+</head>
+<body >
+
+<div class="container">
+    <h1>&#x2728;Player Search&#x2728;</h1>
+
+    <div id="searchWrapper ">
+        <input
+                type="text"
+                id="search-input"
+                placeholder="search for a character"
+                onkeyup="search()"
+        />
+    </div>
+
+    <ul id="charactersList"></ul>
+
+    <button class="submit-button" >proceed</button>
+
+
+
+
+</div>
+<!--   New Code-->
+
+
+<div>
+
+
+</div>
+<!--<script th:href="@{../js/team.js}">-->
+
+
+<script >
+
+    const playerList = [];
+
+    function savePlayer(index){
+        playerList.push(index);
+        $("#charactersList").hide();
+        if(playerList.length===11)
+        {
+            $(".submit-button").show();
+        }
+    }
+    function callToController()
+    {
+
+    }
+
+    function search(){
+        // debugger;
+        let characterList = document.getElementById("charactersList");
+
+        let query = $("#search-input").val();
+        if(query==''){
+            $("#charactersList").hide();
+            $(".submit-button").hide();
+
+        }
+        else
+        {
+            let url = `http://localhost:8080/search/${query}`;
+            $(".submit-button").hide();
+
+            // console.log(url);
+            var text;
+            fetch(url, {
+                headers : {
+                    // 'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }).then(response=>{
+                return response.json();
+
+            }).then(data=>{
+                //   console.log("This is the data ",data);
+                data.forEach((player)=>{
+                    text=` <li class="character">` +`<h2>Player: ${player.firstname}</h2>` + `<p>Country: ${player.country}</p>` + `</li>`;
+                    characterList.innerHTML=text;
+                    // console.log("This is the player" ,player);
+                })
+
+
+            });
+            //  console.log(text);
+            //   characterList.innerHTML=text;
+            //   // $(".search-result").html(text);
+            //   $("#charactersList").show();
+
+        }
+        //  console.log(playerList);
+    }
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+</html>

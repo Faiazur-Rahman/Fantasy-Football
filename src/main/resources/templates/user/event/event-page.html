@@ -1,0 +1,144 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns="http://www.w3.org/1999/xhtml">
+<head th:include="user/common/head::head">
+</head>
+<body>
+<div class="site-wrap">
+
+    <div class="site-mobile-menu">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-logo">
+                <a href="#"><img src="/image/logo.png" alt="Image"></a>
+            </div>
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <header th:replace="user/common/navbar::navbar">
+    </header>
+    <div th:if="*{message != null}" th:fragment="alert (type, message)"
+         class="alert alert-success alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${message}">Test</span>
+    </div>
+    <div th:if="*{danger_message != null}" th:fragment="alert (type, message)"
+         class="alert alert-danger alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${danger_message}">Test</span>
+    </div>
+    <div th:if="*{success_message != null}" th:fragment="alert (type, message)"
+         class="alert alert-success alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${success_message}">Test</span>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6 text-left">
+            <div class="ml-5">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createAnEventModal" >
+                    Create an Event
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            <div class="mr-5">
+                <form th:action="@{/event/search}" method="post">
+                    <input type="text" name="eventName" class="p-2" placeholder="Enter Event Name">
+                    <button class="btn btn-primary px-3">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="padding-bottom: 50px;">
+
+        <div class="card" th:each="event : ${events}" style="margin-bottom: 50px;">
+            <div class="card-header">
+                <span th:text="${event.getTournament().getName()}"></span>
+                <span th:if="${joined.contains(event.getId())}" class="float-right" style="background-color: green;color: white;">
+                    <p style="margin: 5px">Joined</p>
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${event.getEventName()}"></h5>
+                <p class="card-text" th:text="${event.getEventDescription()}"></p>
+                Joined users:<p class="card-text" th:text="${eventDetails.get(event.getId())}"></p>
+                <div th:switch="${joined.contains(event.getId())}">
+                    <div th:case="${true}">
+
+                        <a type="button" class="btn btn-primary" th:href="@{/event/__${event.getId()}__} ">
+                            Enter
+                        </a>
+                        <a class="btn btn-danger" th:href="@{/event/__${event.getId()}__/leave}" >Leave this event</a>
+                    </div>
+
+                    <button th:case="*" type="button" class="btn btn-success" data-toggle="modal" data-target="#joinEventModal" >
+                        Join this event
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!--Modals-->
+<div class="modal fade" id="joinEventModal" tabindex="-1" role="dialog" aria-labelledby="joinEventModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="joinAnEventModalLongTitle">Join an Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/event/join-event}" method="post" >
+                    <div class="form-group">
+                    <input type="text" class="form-control" name="eventCode" placeholder="Enter event code">
+                    </div>
+                    <input type="submit" value="Join" class="btn btn-primary">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createAnEventModal" tabindex="-1" role="dialog" aria-labelledby="createAnEventModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createAnEventModalLongTitle">New Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/event/create-event}" th:object="${eventDTO}" method="post" >
+                    <div class="form-group" >
+                    <input type="text" class="form-control" th:field="*{eventName}" placeholder="Enter event name">
+                    </div>
+                    <div class="form-group" >
+                    <textarea class="form-control" th:field="*{eventDescription}" placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="float-right">
+                    <input type="submit"  value="Create" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<div th:include="user/common/footer"></div>
+<div th:include="user/common/js-files"></div>
+</body>
+</html>

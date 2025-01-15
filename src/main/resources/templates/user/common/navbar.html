@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--<div th:include="user/common/head::head"></div>-->
+<header class="site-navbar absolute " role="banner" th:fragment="navbar">
+    <div class="py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6 col-md-3">
+                    <a href="#" class="text-secondary px-2 pl-0"><span class="icon-facebook"></span></a>
+                    <a href="#" class="text-secondary px-2"><span class="icon-instagram"></span></a>
+                    <a href="#" class="text-secondary px-2"><span class="icon-twitter"></span></a>
+                    <a href="#" class="text-secondary px-2"><span class="icon-linkedin"></span></a>
+                </div>
+                <div class="col-6 col-md-9 text-right">
+                    <div class="d-inline-block"><a href="#" class="text-secondary p-2 d-flex align-items-center"><span class="icon-envelope mr-3"></span> <span class="d-none d-md-block">fintech@brainstation-23.com</span></a></div>
+                    <div class="d-inline-block"><a href="#" class="text-secondary p-2 d-flex align-items-center"><span class="icon-phone mr-0 mr-md-3"></span> <span class="d-none d-md-block">+880-1822334455</span></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="site-navigation position-relative text-right bg-black text-md-right" role="navigation" >
+        <div class="container position-relative">
+            <div class="site-logo">
+                <a href="/"><img src="/image/logo.png" style="height: 114px" alt=""></a>
+            </div>
+
+            <div class="d-inline-block d-md-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+            <ul class="site-menu js-clone-nav d-none d-md-block">
+
+                <li><a href="/">Home</a></li>
+
+                </li>
+                <li><a href="/news/all">News</a></li>
+                <li><a href="/event/">Events</a> </li>
+                <li><a href="/common/round_match">Rounds</a></li>
+                <li><a href="/players">Players</a></li>
+                <!-- <li><a href="about.html">About</a></li> -->
+                <li><a href="/contact/us">Contact</a></li>
+                <li sec:authorize="isAnonymous()"><a type="button" class="btn btn-info btn-rounded" href="/user/loginForm">Login</a></li>
+                <li sec:authorize="isAnonymous()"><a type="button" class="btn btn-success btn-rounded" href="/user/signupForm">Register</a></li>
+                <li sec:authorize="isAuthenticated()" class="has-children">
+                    <a href="/common/profilePage">Profile</a>
+                    <ul class="dropdown">
+                        <li class="text-center bg-danger" style="width: 20px"><a href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+</html>

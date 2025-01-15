@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="https://www.thymleaf.org ">
+<head th:include="common/admin_head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+<div class="wrapper">
+
+    <!-- Preloader -->
+    <!--    <div class="preloader flex-column justify-content-center align-items-center">-->
+    <!--        <img class="animation__shake" src="/image/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">-->
+    <!--    </div>-->
+
+    <!-- Navbar -->
+    <header th:include="common/admin_nav"></header>
+    <!-- Navbar -->
+    <div th:if="*{message != null}" th:fragment="alert (type, message)"
+         class="alert alert-success alert-dismissible fade show text-center" role="alert"
+         th:classappend="'alert-' + ${type}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span th:text="${message}">Test</span>
+    </div>
+
+
+    <!--    Main Sidebar Container-->
+    <header th:include="common/admin_sidebar"></header>
+    <!--    Main Sidebar Container-->
+
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Dashboard</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div align="center" class="page">
+
+                    <h2 style="background-color:powderblue;">Add New Player</h2>
+                    <br/>
+                    <div class="col-sm-4">
+                        <form action="#" th:action="@{/getallplayer}" th:object="${player}" method="post">
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:blue"><b>Player Name</b></label>
+                                    <td>
+                                        <input type="text" th:field="*{nickname}" class="form-control" placeholder="Player Name"
+                                               required oninvalid="this.setCustomValidity('Please Enter Player Name')"
+                                               onvalid="this.setCustomValidity('')"/>
+                                    </td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+
+                                <tr>
+                                    <label class="form-label" style="color:peru"><b>First Name</b></label>
+                                    <td><input type="text" th:field="*{firstname}" class="form-control" placeholder="Firstname"
+                                               required/></td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+
+                                <tr>
+                                    <label class="form-label" style="color:peru"><b>Last Name</b></label>
+                                    <td><input type="text" th:field="*{lastname}" class="form-control" placeholder="Lastname" required/>
+                                    </td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:peru"><b>Position</b></label>
+                                    <td>
+                                        <select name="position" id="position" th:field="*{positionType}">
+                                            <option value="FW">FW</option>
+                                            <option value="MF">MF</option>
+                                            <option value="GK">GK</option>
+                                            <option value="DF">DF</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:red"><b>Country</b></label>
+                                    <!--                    <td><input type="text" th:field="*{country}" class="form-control" placeholder="Country" required/>-->
+                                    </td>
+                                    <td>
+                                        <select name="" th:field="*{country}" id="">
+                                            <option th:each="country : ${countires}" th:value="${country.getFullName()}" th:text="${country.getFullName()}">
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:powderblue"><b>Value</b></label>
+                                    <td><input type="text" th:field="*{value}" class="form-control" placeholder="Value" required/></td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:darkgreen"><b>Status</b></label>
+                                    <td><select name="status" id="status" th:field="*{status}">
+                                        <option value="Available">Available</option>
+                                        <option value="Injured">Injured</option>
+                                        <option value="Yellow Card Suspension">Yellow Card Suspension</option>
+                                        <option value="Red Card Suspension">Red Card Suspension</option>
+                                    </select></td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:darkgreen"><b>Picture</b></label>
+                                    <td><input type="text" th:field="*{picture}" class="form-control" placeholder="Image Link"
+                                               required/></td>
+                                </tr>
+                            </div>
+                            <br></br>
+                            <div alight="left">
+                                <tr>
+                                    <label class="form-label" style="color:skyblue"><b>Match Point</b></label>
+                                    <td><input type="text" th:field="*{playerPoints}" class="form-control" placeholder="Points"
+                                               required/></td>
+                                </tr>
+                            </div>
+                            <br>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="submit" class="btn btn-info">Save</button>
+                                </td>
+                            </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
+        </section>
+
+
+
+
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:include="common/admin_footer"></footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+
+<!--BootStrap JS-->
+<div th:include="common/admin_js"></div>
+<div th:include="user/common/js-files"></div>
+
+<!-- AdminLTE App -->
+<script src="/js/adminlte.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/js/pages/dashboard.js"></script>
+</body>
+</html>
